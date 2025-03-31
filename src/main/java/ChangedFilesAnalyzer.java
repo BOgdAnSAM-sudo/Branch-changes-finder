@@ -4,7 +4,6 @@ import GitHandlers.GitHubApiException;
 import GitHandlers.LocalGitExecutor;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,9 +52,7 @@ public class ChangedFilesAnalyzer {
         }catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new GitException("Git operation was interrupted", e);
-        } catch (GitException e) {
-            throw e;
-        } catch (GitHubApiException e) {
+        } catch (GitException | GitHubApiException e) {
             throw e;
         } catch (Exception e) {
             throw new GitException("Error executing git command", e);

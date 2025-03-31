@@ -99,7 +99,7 @@ class ChangedFilesAnalyzerTest {
                 () -> analyzer.findOverlappingChangedFiles());
 
         assertEquals("Error executing git command", exception.getMessage());
-        assertTrue(exception.getCause() instanceof IOException);
+        assertInstanceOf(IOException.class, exception.getCause());
     }
 
     @Test
