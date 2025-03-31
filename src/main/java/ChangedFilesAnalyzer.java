@@ -26,6 +26,17 @@ public class ChangedFilesAnalyzer {
         this.branchB = branchB;
     }
 
+    public ChangedFilesAnalyzer(@NotNull String owner, @NotNull String repo,
+                                @NotNull String branchA, @NotNull String branchB,
+                                @NotNull LocalGitExecutor gitExecutor, @NotNull GitHubApiClient githubClient) {
+        this.owner = owner;
+        this.repo = repo;
+        this.branchA = branchA;
+        this.branchB = branchB;
+        this.gitExecutor = gitExecutor;
+        this.githubClient = githubClient;
+    }
+
     public List<String> findOverlappingChangedFiles() throws GitException, GitHubApiException {
         try {
             String mergeBase = gitExecutor.getMergeBase(branchA, branchB);
@@ -39,11 +50,13 @@ public class ChangedFilesAnalyzer {
             return remoteChangedFiles.stream()
                     .filter(localChangedFiles::contains)
                     .collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new GitHubApiException("Failed to communicate with GitHub API", e);
-        } catch (InterruptedException e) {
+        }catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new GitException("Git operation was interrupted", e);
+        } catch (GitException e) {
+            throw e;
+        } catch (GitHubApiException e) {
+            throw e;
         } catch (Exception e) {
             throw new GitException("Error executing git command", e);
         }
