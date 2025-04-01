@@ -68,7 +68,6 @@ class GitHubApiClientTest {
         assertTrue(changedFiles.contains("file1.txt"));
         assertTrue(changedFiles.contains("file2.txt"));
 
-        // Verify the request was made as expected
         wireMockServer.verify(1, getRequestedFor(urlPathEqualTo(
                 String.format("/repos/%s/%s/compare/%s...%s",
                         TEST_OWNER, TEST_REPO, TEST_BASE, TEST_BRANCH))));
@@ -125,7 +124,6 @@ class GitHubApiClientTest {
 
     @Test
     void getChangedFilesShouldHandleNetworkErrorsTest() {
-        // Simulate connection reset
         wireMockServer.stubFor(get(urlPathEqualTo(
                 String.format("/repos/%s/%s/compare/%s...%s",
                         TEST_OWNER, TEST_REPO, TEST_BASE, TEST_BRANCH)))
